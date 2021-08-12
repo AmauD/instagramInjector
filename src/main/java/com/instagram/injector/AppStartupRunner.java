@@ -1,6 +1,7 @@
 package com.instagram.injector;
 
 import com.instagram.entity.Instagram;
+import com.instagram.repository.InstagramRepository;
 import com.instagram.service.InstagramService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -17,7 +18,7 @@ import java.util.stream.Collectors;
 @Component
 public class AppStartupRunner implements ApplicationRunner {
 
-    @Autowired InstagramService instagramService;
+
 
 
     @Override
@@ -76,6 +77,7 @@ public class AppStartupRunner implements ApplicationRunner {
         // for loop and insert 1 by 1
 
         for (int i = 0; i < postInstagrams.size(); i++){
+            InstagramService instagramService = new InstagramService();
             Instagram postInstagram = postInstagrams.get(i);
             postInstagram.setId((long) i);
             postInstagram.getId();
@@ -84,7 +86,6 @@ public class AppStartupRunner implements ApplicationRunner {
             postInstagram.getPost_date();
             postInstagram.getDescription();
             postInstagram.getDisplay_url();
-
 
             instagramService.create(postInstagram);
         }

@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class InstagramService {
-    @Autowired InstagramRepository instagramRepository;
+    @Autowired
+    InstagramRepository instagramRepository;
 
-    public Instagram create(Instagram postInstagram) { return instagramRepository.save(postInstagram); }
+    public Instagram create(Instagram instagram) {
+        return instagramRepository.save(instagram);
+    }
 }
