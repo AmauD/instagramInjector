@@ -44,35 +44,27 @@ public class InstagramInjectorApplication implements CommandLineRunner {
         JSONObject variables = new JSONObject();
         variables.put("tag_name","cbrebestoffice");
         variables.put("first","10");
-
         String data = web.get()
                 .uri(builder -> builder
                         .queryParam("query_hash", "{1}")
                         .queryParam("variables", "{2}").build("298b92c8d7cad703f7565aa892ede943", variables))
                 .retrieve().bodyToMono(String.class).block();
 
-
         JSONObject jo = new JSONObject(data);
         jo  = jo.getJSONObject("data");
         jo = jo.getJSONObject("hashtag");
         jo = jo.getJSONObject("edge_hashtag_to_media");
         JSONArray edges = jo.getJSONArray("edges");
-
         List<Instagram> postInstagrams = new ArrayList<>();
 
 
         for (int i = 0; i < edges.length(); i++){
-
             JSONObject objects = edges.getJSONObject(i);
             Instagram postInstagram = new Instagram();
-
             postInstagram.setId((long) i);
             postInstagram.setPostId(objects.getJSONObject("node").getLong("id"));
             postInstagram.setDisplayUrl(objects.getJSONObject("node").getString("display_url"));
-
             postInstagram.setDescription(objects.getJSONObject("node").getJSONObject("edge_media_to_caption").getJSONArray("edges").getJSONObject(0).getJSONObject("node").getString("text"));
-
-
             postInstagrams.add(postInstagram);
         }
 
@@ -81,7 +73,6 @@ public class InstagramInjectorApplication implements CommandLineRunner {
 //        postInstagrams = postInstagrams.stream().filter(postInstagram -> postInstagram.getDescription().toLowerCase().contains("#cbrebestoffice")).collect(Collectors.toList());
 
         for (Instagram instagram : postInstagrams){
-            // TODO Execute si il n'existe pas
             if (!instagramRepository.existsByPostId(instagram.getPostId())){
                 BufferedImage image;
                 String path = instagram.getPostId() + ".jpg";
